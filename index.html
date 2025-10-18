@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stasis: Breathing Exercise</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'VT323', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .pixel {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            opacity: 0.5;
+            z-index: 1;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            from {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: clamp(28px, 6vw, 36px);
+            letter-spacing: 2px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInScale 1s ease-out forwards;
+        }
+
+        .rounds-counter {
+            font-size: 16px;
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: fadeInScale 0.5s ease-out forwards;
+            min-height: 22px;
+            letter-spacing: 2px;
+        }
+
+        .breath-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 3px solid rgba(212, 237, 249, 0.4);
+            margin: 0 auto 30px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(212, 237, 249, 0.3);
+        }
+
+        .breath-circle-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 237, 249, 0.3), transparent);
+            transform: scale(0.9);
+            -webkit-transform: scale(0.9);
+            -ms-transform: scale(0.9);
+        }
+
+        .breath-circle-inner.breathing {
+            -webkit-animation: breathing 5s ease-out infinite normal;
+            animation: breathing 5s ease-out infinite normal;
+        }
+
+        @-webkit-keyframes breathing {
+            0% {
+                -webkit-transform: scale(0.9);
+                transform: scale(0.9);
+                box-shadow: 0 0 20px rgba(212, 237, 249, 0.4), 0 0 40px rgba(212, 237, 249, 0.2);
+            }
+
+            25% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(212, 237, 249, 0.6), 0 0 60px rgba(212, 237, 249, 0.4);
+            }
+
+            60% {
+                -webkit-transform: scale(0.9);
+                transform: scale(0.9);
+                box-shadow: 0 0 20px rgba(212, 237, 249, 0.4), 0 0 40px rgba(212, 237, 249, 0.2);
+            }
+
+            100% {
+                -webkit-transform: scale(0.9);
+                transform: scale(0.9);
+                box-shadow: 0 0 20px rgba(212, 237, 249, 0.4), 0 0 40px rgba(212, 237, 249, 0.2);
+            }
+        }
+
+        @keyframes breathing {
+            0% {
+                -webkit-transform: scale(0.9);
+                -ms-transform: scale(0.9);
+                transform: scale(0.9);
+                box-shadow: 0 0 20px rgba(212, 237, 249, 0.4), 0 0 40px rgba(212, 237, 249, 0.2);
+            }
+
+            25% {
+                -webkit-transform: scale(1);
+                -ms-transform: scale(1);
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(212, 237, 249, 0.6), 0 0 60px rgba(212, 237, 249, 0.4);
+            }
+
+            60% {
+                -webkit-transform: scale(0.9);
+                -ms-transform: scale(0.9);
+                transform: scale(0.9);
+                box-shadow: 0 0 20px rgba(212, 237, 249, 0.4), 0 0 40px rgba(212, 237, 249, 0.2);
+            }
+
+            100% {
+                -webkit-transform: scale(0.9);
+                -ms-transform: scale(0.9);
+                transform: scale(0.9);
+                box-shadow: 0 0 20px rgba(212, 237, 249, 0.4), 0 0 40px rgba(212, 237, 249, 0.2);
+            }
+        }
+
+        .instruction {
+            font-size: 28px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInScale 0.5s ease-out forwards;
+            min-height: 35px;
+        }
+
+        .counter {
+            font-size: 56px;
+            margin-bottom: 10px;
+            opacity: 1;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phase-instruction {
+            font-size: 15px;
+            margin-bottom: 20px;
+            opacity: 0;
+            letter-spacing: 1px;
+            min-height: 25px;
+            animation: fadeInScale 0.5s ease-out forwards;
+            text-shadow: 0 0 10px rgba(212, 237, 249, 0.6), 0 0 20px rgba(212, 237, 249, 0.4), 0 0 30px rgba(212, 237, 249, 0.2);
+        }
+
+        @keyframes subtleGlow {
+            0% {
+                text-shadow: 0 0 8px rgba(212, 237, 249, 0.5), 0 0 15px rgba(212, 237, 249, 0.3), 0 0 25px rgba(212, 237, 249, 0.15);
+            }
+
+            50% {
+                text-shadow: 0 0 12px rgba(212, 237, 249, 0.7), 0 0 22px rgba(212, 237, 249, 0.5), 0 0 35px rgba(212, 237, 249, 0.3);
+            }
+
+            100% {
+                text-shadow: 0 0 8px rgba(212, 237, 249, 0.5), 0 0 15px rgba(212, 237, 249, 0.3), 0 0 25px rgba(212, 237, 249, 0.15);
+            }
+        }
+
+        .phase-instruction.active-glow {
+            animation: fadeInScale 0.5s ease-out forwards, subtleGlow 2s ease-in-out infinite;
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            relative cursor-pointer;
+            padding: 16px 32px;
+            text-center;
+            font-family: 'VT323', monospace;
+            display: inline-flex;
+            justify-content: center;
+            font-size: 18px;
+            text-transform: uppercase;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            transition: transform 300ms ease-in-out;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+
+        .btn:focus {
+            outline: 2px solid white;
+            outline-offset: 4px;
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 20;
+        }
+
+        .btn-shine {
+            position: absolute;
+            left: -75%;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(12deg);
+            z-index: 10;
+            filter: blur(10px);
+            transition: left 1000ms ease-in-out;
+        }
+
+        .btn:hover .btn-shine {
+            left: 125%;
+        }
+
+        .btn-border-tl {
+            width: 50%;
+            filter: drop-shadow(0 0 10px rgba(212, 237, 249, 0.5));
+            transition: all 300ms;
+            display: block;
+            border-color: #D4EDF9;
+            position: absolute;
+            height: 20%;
+            border-top-left-radius: 8px;
+            border-left: 2px solid;
+            border-top: 2px solid;
+            top: 0;
+            left: 0;
+        }
+
+        .btn-border-tr {
+            width: 50%;
+            filter: drop-shadow(0 0 10px rgba(212, 237, 249, 0.5));
+            transition: all 300ms;
+            display: block;
+            border-color: #D4EDF9;
+            position: absolute;
+            height: 60%;
+            border-top-right-radius: 8px;
+            border-right: 2px solid;
+            border-top: 2px solid;
+            top: 0;
+            right: 0;
+        }
+
+        .btn:hover .btn-border-tr {
+            height: 90%;
+        }
+
+        .btn-border-bl {
+            width: 50%;
+            filter: drop-shadow(0 0 10px rgba(212, 237, 249, 0.5));
+            transition: all 300ms;
+            display: block;
+            border-color: #D4EDF9;
+            position: absolute;
+            height: 60%;
+            border-bottom-left-radius: 8px;
+            border-left: 2px solid;
+            border-bottom: 2px solid;
+            left: 0;
+            bottom: 0;
+        }
+
+        .btn:hover .btn-border-bl {
+            height: 90%;
+        }
+
+        .btn-border-br {
+            width: 50%;
+            filter: drop-shadow(0 0 10px rgba(212, 237, 249, 0.5));
+            transition: all 300ms;
+            display: block;
+            border-color: #D4EDF9;
+            position: absolute;
+            height: 20%;
+            border-bottom-right-radius: 8px;
+            border-right: 2px solid;
+            border-bottom: 2px solid;
+            right: 0;
+            bottom: 0;
+        }
+
+        .btn.active {
+            background: rgba(212, 237, 249, 0.15);
+        }
+
+        .btn.active .btn-border-tr,
+        .btn.active .btn-border-bl {
+            height: 90%;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes modalSlideOut {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeInScale 0.3s ease-out forwards;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px 60px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(212, 237, 249, 0.5);
+            box-shadow: 0 0 30px rgba(212, 237, 249, 0.3), 0 0 60px rgba(212, 237, 249, 0.2);
+            animation: modalSlideIn 0.5s ease-out forwards;
+        }
+
+        .modal-content.closing {
+            animation: modalSlideOut 0.5s ease-out forwards;
+        }
+
+        .modal-content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(212, 237, 249, 0.6);
+        }
+
+        .modal-content p {
+            font-size: 18px;
+            opacity: 0.8;
+            letter-spacing: 2px;
+        }
+
+        .animate-text {
+            animation: fadeInScale 0.4s ease-out forwards;
+        }
+
+        .pulse-number {
+            animation: pulse 1s ease-in-out;
+        }
+
+        .mode-info {
+            font-size: 14px;
+            margin-top: 15px;
+            opacity: 0;
+            letter-spacing: 1px;
+            max-width: 600px;
+            line-height: 1.4;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            animation: fadeInScale 0.6s ease-out forwards;
+            animation-delay: 0.2s;
+        }
+
+        .who-attribution {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            opacity: 0;
+            z-index: 100;
+            text-align: right;
+            animation: fadeInScale 1s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        .who-attribution a {
+            color: #D4EDF9;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .who-attribution a:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="modal-overlay" id="completionModal">
+        <div class="modal-content" id="modalContent">
+            <h2>EXERCISE COMPLETE!</h2>
+            <p>WELL DONE</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">Stasis</h1>
+        <div class="rounds-counter" id="roundsCounter">&nbsp;</div>
+        <div class="breath-circle">
+            <div class="breath-circle-inner" id="circle"></div>
+        </div>
+        <div class="instruction" id="instruction">SELECT METHOD</div>
+        <div class="counter" id="counter">&nbsp;</div>
+        <div class="phase-instruction" id="phaseInstruction">&nbsp;</div>
+        <div class="controls">
+            <button class="btn" id="btn478" onclick="start478()">
+                <span class="btn-text">4-7-8 METHOD</span>
+                <span class="btn-shine"></span>
+                <span class="btn-border-tl"></span>
+                <span class="btn-border-tr"></span>
+                <span class="btn-border-bl"></span>
+                <span class="btn-border-br"></span>
+            </button>
+            <button class="btn" id="btnBox" onclick="startBox()">
+                <span class="btn-text">BOX BREATHING</span>
+                <span class="btn-shine"></span>
+                <span class="btn-border-tl"></span>
+                <span class="btn-border-tr"></span>
+                <span class="btn-border-bl"></span>
+                <span class="btn-border-br"></span>
+            </button>
+            <button class="btn" id="btnDiaphragmatic" onclick="startDiaphragmatic()">
+                <span class="btn-text">DIAPHRAGMATIC</span>
+                <span class="btn-shine"></span>
+                <span class="btn-border-tl"></span>
+                <span class="btn-border-tr"></span>
+                <span class="btn-border-bl"></span>
+                <span class="btn-border-br"></span>
+            </button>
+            <button class="btn" id="btnWimHof" onclick="startWimHof()">
+                <span class="btn-text">WIM HOF METHOD</span>
+                <span class="btn-shine"></span>
+                <span class="btn-border-tl"></span>
+                <span class="btn-border-tr"></span>
+                <span class="btn-border-bl"></span>
+                <span class="btn-border-br"></span>
+            </button>
+            <button class="btn" id="btnStop" onclick="stop()">
+                <span class="btn-text">STOP</span>
+                <span class="btn-shine"></span>
+                <span class="btn-border-tl"></span>
+                <span class="btn-border-tr"></span>
+                <span class="btn-border-bl"></span>
+                <span class="btn-border-br"></span>
+            </button>
+        </div>
+        <div class="mode-info" id="modeInfo">&nbsp;</div>
+    </div>
+
+    <div class="who-attribution">
+        BREATHING TECHNIQUES<br>
+        <a href="https://www.who.int/publications/i/item/9789240003927" target="_blank">WHO STRESS MANAGEMENT GUIDE</a>
+    </div>
+
+    <script>
+        for (let i = 0; i < 100; i++) {
+            let star = document.createElement('div');
+            star.className = 'pixel';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(star);
+        }
+
+        let allIntervals = [];
+        let currentCycle;
+        let isRunning = false;
+        let currentRound = 0;
+        let totalRounds = 0;
+        let completedRounds = 0;
+
+        function clearAllIntervals() {
+            allIntervals.forEach(id => clearInterval(id));
+            allIntervals = [];
+            if (currentCycle) {
+                clearTimeout(currentCycle);
+                currentCycle = null;
+            }
+        }
+
+        function showCompletionModal() {
+            let modal = document.getElementById('completionModal');
+            let modalContent = document.getElementById('modalContent');
+            modal.classList.add('show');
+            modalContent.classList.remove('closing');
+            setTimeout(() => {
+                modalContent.classList.add('closing');
+                setTimeout(() => {
+                    modal.classList.remove('show');
+                    resetToDefault();
+                }, 500);
+            }, 3000);
+        }
+
+        function resetToDefault() {
+            isRunning = false;
+            clearAllIntervals();
+            let circle = document.getElementById('circle');
+            circle.className = 'breath-circle-inner';
+            animateText('instruction', 'SELECT METHOD');
+            animateText('counter', '');
+            animateText('phaseInstruction', '');
+            animateText('roundsCounter', '');
+            ['btn478', 'btnBox', 'btnDiaphragmatic', 'btnWimHof'].forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+            animateText('modeInfo', '');
+            currentRound = 0;
+            completedRounds = 0;
+        }
+
+        function animateText(elementId, text, additionalClass = '') {
+            let element = document.getElementById(elementId);
+            element.style.animation = 'none';
+            if (elementId === 'phaseInstruction') {
+                element.classList.remove('active-glow');
+            }
+            setTimeout(() => {
+                element.textContent = text || '\u00A0';
+                if (text && text.trim() && elementId === 'phaseInstruction') {
+                    element.classList.add('active-glow');
+                    element.style.animation = 'fadeInScale 0.5s ease-out forwards, subtleGlow 2s ease-in-out infinite';
+                } else {
+                    element.style.animation = 'fadeInScale 0.4s ease-out forwards';
+                }
+                if (additionalClass) {
+                    element.classList.add(additionalClass);
+                    setTimeout(() => element.classList.remove(additionalClass), 1000);
+                }
+            }, 10);
+        }
+
+        function startCountdown(callback) {
+            let count = 3;
+            let circle = document.getElementById('circle');
+            circle.classList.add('breathing');
+            animateText('instruction', 'GET READY');
+            animateText('phaseInstruction', 'STARTING IN...');
+            animateText('counter', count, 'pulse-number');
+            let countInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    animateText('counter', count, 'pulse-number');
+                } else {
+                    clearInterval(countInterval);
+                    animateText('counter', '');
+                    animateText('phaseInstruction', '');
+                    callback();
+                }
+            }, 1000);
+            allIntervals.push(countInterval);
+        }
+
+        function start478() {
+            if (isRunning) stop();
+            isRunning = true;
+            currentRound = 0;
+            completedRounds = 0;
+            totalRounds = 4;
+            document.getElementById('btn478').classList.add('active');
+            removeOtherActive('btn478');
+            animateText('modeInfo', 'INHALE 4S • HOLD 7S • EXHALE 8S • PROMOTES SLEEP & REDUCES ANXIETY');
+            animateText('roundsCounter', 'CYCLE 1 OF ' + totalRounds);
+            startCountdown(() => {
+                if (isRunning) cycle478();
+            });
+        }
+
+        function startBox() {
+            if (isRunning) stop();
+            isRunning = true;
+            currentRound = 0;
+            completedRounds = 0;
+            totalRounds = 15;
+            document.getElementById('btnBox').classList.add('active');
+            removeOtherActive('btnBox');
+            animateText('modeInfo', 'INHALE 4S • HOLD 4S • EXHALE 4S • HOLD 4S • NAVY SEAL TECHNIQUE FOR FOCUS');
+            animateText('roundsCounter', 'CYCLE 1 OF ' + totalRounds);
+            startCountdown(() => {
+                if (isRunning) cycleBox();
+            });
+        }
+
+        function startDiaphragmatic() {
+            if (isRunning) stop();
+            isRunning = true;
+            currentRound = 0;
+            completedRounds = 0;
+            totalRounds = 5;
+            document.getElementById('btnDiaphragmatic').classList.add('active');
+            removeOtherActive('btnDiaphragmatic');
+            animateText('modeInfo', 'SLOW DEEP BREATHING • FOCUS ON BELLY EXPANSION • STRENGTHENS DIAPHRAGM');
+            animateText('roundsCounter', 'CYCLE 1 OF ' + totalRounds);
+            startCountdown(() => {
+                if (isRunning) cycleDiaphragmatic();
+            });
+        }
+
+        function startWimHof() {
+            if (isRunning) stop();
+            isRunning = true;
+            currentRound = 1;
+            completedRounds = 0;
+            totalRounds = 3;
+            document.getElementById('btnWimHof').classList.add('active');
+            removeOtherActive('btnWimHof');
+            animateText('modeInfo', 'CONTROLLED HYPERVENTILATION • 30 POWER BREATHS • HOLD UNTIL URGE • 3 ROUNDS');
+            animateText('roundsCounter', 'ROUND ' + currentRound + ' OF ' + totalRounds);
+            startCountdown(() => {
+                if (isRunning) cycleWimHof();
+            });
+        }
+
+        function removeOtherActive(active) {
+            ['btn478', 'btnBox', 'btnDiaphragmatic', 'btnWimHof'].forEach(id => {
+                if (id !== active) document.getElementById(id).classList.remove('active');
+            });
+        }
+
+        function stop() {
+            resetToDefault();
+        }
+
+        function cycle478() {
+            breatheIn(4, () => {
+                if (!isRunning) return;
+                hold(7, () => {
+                    if (!isRunning) return;
+                    breatheOut(8, () => {
+                        if (!isRunning) return;
+                        completedRounds++;
+                        if (completedRounds < totalRounds && isRunning) {
+                            animateText('roundsCounter', 'CYCLE ' + (completedRounds + 1) + ' OF ' + totalRounds);
+                            currentCycle = setTimeout(cycle478, 500);
+                        } else if (isRunning) {
+                            showCompletionModal();
+                        }
+                    });
+                });
+            });
+        }
+
+        function cycleBox() {
+            breatheIn(4, () => {
+                if (!isRunning) return;
+                hold(4, () => {
+                    if (!isRunning) return;
+                    breatheOut(4, () => {
+                        if (!isRunning) return;
+                        hold(4, () => {
+                            if (!isRunning) return;
+                            completedRounds++;
+                            if (completedRounds < totalRounds && isRunning) {
+                                animateText('roundsCounter', 'CYCLE ' + (completedRounds + 1) + ' OF ' + totalRounds);
+                                currentCycle = setTimeout(cycleBox, 500);
+                            } else if (isRunning) {
+                                showCompletionModal();
+                            }
+                        }, 'HOLD');
+                    });
+                });
+            });
+        }
+
+        function cycleDiaphragmatic() {
+            breatheIn(5, () => {
+                if (!isRunning) return;
+                breatheOut(7, () => {
+                    if (!isRunning) return;
+                    completedRounds++;
+                    if (completedRounds < totalRounds && isRunning) {
+                        animateText('roundsCounter', 'CYCLE ' + (completedRounds + 1) + ' OF ' + totalRounds);
+                        currentCycle = setTimeout(cycleDiaphragmatic, 1000);
+                    } else if (isRunning) {
+                        showCompletionModal();
+                    }
+                });
+            });
+        }
+
+        function cycleWimHof() {
+            animateText('phaseInstruction', 'POWER BREATHING');
+            wimHofPowerBreaths(30, () => {
+                if (!isRunning) return;
+                animateText('phaseInstruction', 'HOLD UNTIL URGE');
+                holdUntilUrge(() => {
+                    if (!isRunning) return;
+                    breatheIn(1, () => {
+                        if (!isRunning) return;
+                        hold(15, () => {
+                            if (!isRunning) return;
+                            currentRound++;
+                            if (currentRound <= totalRounds && isRunning) {
+                                animateText('roundsCounter', 'ROUND ' + currentRound + ' OF ' + totalRounds);
+                                currentCycle = setTimeout(cycleWimHof, 2000);
+                            } else if (isRunning) {
+                                showCompletionModal();
+                            }
+                        }, 'HOLD FULL');
+                    });
+                });
+            });
+        }
+
+        function wimHofPowerBreaths(count, callback) {
+            let remaining = count;
+            animateText('instruction', 'POWER BREATH');
+            animateText('counter', remaining);
+
+            function powerBreathe() {
+                if (!isRunning) return;
+                setTimeout(() => {
+                    remaining--;
+                    if (remaining > 0 && isRunning) {
+                        animateText('counter', remaining);
+                        setTimeout(powerBreathe, 50);
+                    } else if (isRunning) {
+                        animateText('counter', '');
+                        callback();
+                    }
+                }, 950);
+            }
+            powerBreathe();
+        }
+
+        function holdUntilUrge(callback) {
+            animateText('instruction', 'HOLD BREATH');
+            let seconds = 0;
+            let holdInterval = setInterval(() => {
+                if (!isRunning) {
+                    clearInterval(holdInterval);
+                    return;
+                }
+                seconds++;
+                animateText('counter', seconds + 'S');
+            }, 1000);
+            allIntervals.push(holdInterval);
+
+            setTimeout(() => {
+                if (!isRunning) return;
+                clearInterval(holdInterval);
+                animateText('counter', 'READY?');
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    animateText('counter', '');
+                    callback();
+                }, 2000);
+            }, 15000);
+        }
+
+        function breatheIn(duration, callback) {
+            if (!isRunning) return;
+            animateText('instruction', 'BREATHE IN');
+            animateText('phaseInstruction', 'BELLY RISES');
+            countdown(duration, callback);
+        }
+
+        function breatheOut(duration, callback) {
+            if (!isRunning) return;
+            animateText('instruction', 'BREATHE OUT');
+            animateText('phaseInstruction', 'BELLY FALLS');
+            countdown(duration, callback);
+        }
+
+        function hold(duration, callback, label = 'HOLD') {
+            if (!isRunning) return;
+            animateText('instruction', label);
+            animateText('phaseInstruction', 'HOLD STEADY');
+            countdown(duration, callback);
+        }
+
+        function countdown(duration, callback) {
+            let remaining = duration;
+            animateText('counter', remaining);
+            let interval = setInterval(() => {
+                if (!isRunning) {
+                    clearInterval(interval);
+                    return;
+                }
+                remaining--;
+                if (remaining > 0) {
+                    animateText('counter', remaining);
+                } else {
+                    clearInterval(interval);
+                    animateText('counter', '');
+                    callback();
+                }
+            }, 1000);
+            allIntervals.push(interval);
+        }
+    </script>
+
+</body>
+
+</html>
